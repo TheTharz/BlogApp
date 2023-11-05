@@ -1,5 +1,6 @@
 const User = require('../models/User.js');
 const hashPassword = require('../helpers/userHelper.js');
+
 //endpoint for testing
 const test = (req, res) => {
   return res.status(200).json({ message: 'testing the end point' });
