@@ -23,12 +23,12 @@ const createUser = async (req, res) => {
   if (!validator.isEmail(email)) {
     return res.status(400).json({ message: 'Please enter a valid email' });
   }
-  if (!validator.isPassword(password)) {
+  if (!validator.isStrongPassword(password)) {
     return res.status(400).json({ message: 'Please enter a strong password' });
   }
 
   //encrypting the password
-  const hashedPassword = hashPassword(password);
+  const hashedPassword = await hashPassword(password);
 
   try {
     const userExist = await User.findOne({ email });
@@ -47,7 +47,8 @@ const createUser = async (req, res) => {
       .status(200)
       .json({ message: 'User saved successfully', savedUser });
   } catch (error) {
-    throw new Error(error);
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -75,13 +76,20 @@ const loginUser = async (req, res) => {
     }
 
     //creating the token
-    const token = await User.createToken(user);
+    const token = await createToken(user);
     res.cookie('jwt', token, { httponly: true, maxAge: 360000 });
     return res
       .status(200)
-      .json({ message: 'User logged in successfully', token: token, user });
+      .json({
+        message: 'User logged in successfully',
+        token: token,
+        username: user.username,
+        email: user.email,
+        blogs: user.blogs,
+        profilepicture: user.profilepicture,
+      });
   } catch (error) {
-    throw new Error(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 module.exports = { test, createUser, loginUser };

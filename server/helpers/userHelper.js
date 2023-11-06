@@ -8,7 +8,7 @@ const hashPassword = async (password) => {
     const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
   } catch (error) {
-    throw new Error('password hashing failed', error);
+    throw new Error(error);
   }
 };
 
@@ -21,7 +21,7 @@ const createToken = async (user) => {
     });
     return token;
   } catch (error) {
-    throw new Error('token creation failed', error);
+    throw new Error(error);
   }
 };
 
@@ -31,7 +31,7 @@ const comparePassword = async (password, hashpassword) => {
     const match = await bcrypt.compare(password, hashpassword);
     return match;
   } catch (error) {
-    throw new Error('password creation failed', error);
+    throw new Error(error);
   }
 };
 module.exports = { hashPassword, createToken, comparePassword };
