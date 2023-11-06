@@ -78,18 +78,40 @@ const loginUser = async (req, res) => {
     //creating the token
     const token = await createToken(user);
     res.cookie('jwt', token, { httponly: true, maxAge: 360000 });
-    return res
-      .status(200)
-      .json({
-        message: 'User logged in successfully',
-        token: token,
-        username: user.username,
-        email: user.email,
-        blogs: user.blogs,
-        profilepicture: user.profilepicture,
-      });
+    return res.status(200).json({
+      message: 'User logged in successfully',
+      token: token,
+      username: user.username,
+      email: user.email,
+      blogs: user.blogs,
+      profilepicture: user.profilepicture,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-module.exports = { test, createUser, loginUser };
+
+//updating the user
+const updateUser = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const updates = req.body;
+
+    if (!updates || Object.keys(updates).length === 0) {
+      return res.status(404).json({ message: 'Invalid update data entered' });
+    }
+
+    const user = await User.findByIdAndUpdate(_id, updates, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res
+      .status(200)
+      .json({ message: 'User updated successfully', user: user });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+module.exports = { test, createUser, loginUser, updateUser };
