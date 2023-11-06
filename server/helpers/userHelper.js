@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 //hashing the password
 const hashPassword = async (password) => {
   try {
@@ -11,4 +12,26 @@ const hashPassword = async (password) => {
   }
 };
 
-module.exports = hashPassword;
+//creating the token
+const createToken = async (user) => {
+  const { _id, email } = user;
+  try {
+    const token = jwt.sign({ _id, email }, process.env.SECRET, {
+      expiresIn: '1h',
+    });
+    return token;
+  } catch (error) {
+    throw new Error('token creation failed', error);
+  }
+};
+
+//comparing the password
+const comparePassword = async (password, hashpassword) => {
+  try {
+    const match = await bcrypt.compare(password, hashpassword);
+    return match;
+  } catch (error) {
+    throw new Error('password creation failed', error);
+  }
+};
+module.exports = { hashPassword, createToken, comparePassword };
