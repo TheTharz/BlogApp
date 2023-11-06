@@ -8,6 +8,8 @@ const {
   updateUser,
 } = require('../controller/userController.js');
 
+const checkAuth = require('../middleware/authMiddleware.js');
+
 // http://localhost:3000/api/users/test
 router.route('/test').get(test);
 
@@ -18,5 +20,6 @@ router.route('/createuser').post(createUser);
 router.route('/login').post(loginUser);
 
 // http://localhost:3000/api/users/updateuser/:id
-router.route('/updateuser/:id').put(updateUser);
+router.route('/updateuser/:id').put(checkAuth, updateUser);
+
 module.exports = router;

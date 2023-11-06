@@ -35,6 +35,4 @@ const comparePassword = async (password, hashpassword) => {
   }
 };
 
-//verify the token
-
 module.exports = { hashPassword, createToken, comparePassword };
