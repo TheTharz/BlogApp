@@ -14,7 +14,7 @@ const checkAuth = async (req, res, next) => {
     }
 
     const decodedToken = jwt.verify(token, process.env.SECRET);
-    console.log(decodedToken);
+    //console.log(decodedToken);
     next();
   } catch (error) {
     return res.status(403).json({ message: error.message });

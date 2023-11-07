@@ -5,6 +5,8 @@ const {
   comparePassword,
 } = require('../helpers/userHelper.js');
 const validator = require('validator');
+const { request } = require('express');
+const jwt = require('jsonwebtoken');
 
 //endpoint for testing
 const test = (req, res) => {
@@ -114,4 +116,37 @@ const updateUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-module.exports = { test, createUser, loginUser, updateUser };
+
+//deleting the user
+const deleteUser = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    console.log(_id);
+    //decode the token from cookie
+    const decodedToken = jwt.verify(req.cookies.jwt, process.env.SECRET);
+    console.log(decodedToken);
+
+    //compare the id send with cookie and params
+    if (_id !== decodedToken._id) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    //delete the user
+    const user = await User.findById(_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    //when removing the users remove user blogs as well
+    //delete the cookies
+    res.clearCookie('jwt');
+
+    return res
+      .status(200)
+      .json({ message: 'User deleted', username: user.username });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+module.exports = { test, createUser, loginUser, updateUser, deleteUser };

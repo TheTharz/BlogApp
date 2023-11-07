@@ -6,6 +6,7 @@ const {
   createUser,
   loginUser,
   updateUser,
+  deleteUser,
 } = require('../controller/userController.js');
 
 const checkAuth = require('../middleware/authMiddleware.js');
@@ -21,5 +22,8 @@ router.route('/login').post(loginUser);
 
 // http://localhost:3000/api/users/updateuser/:id
 router.route('/updateuser/:id').put(checkAuth, updateUser);
+
+// http://localhost:3000/api/users/deleteuser/:id
+router.route('/deleteuser/:id').delete(checkAuth, deleteUser);
 
 module.exports = router;
