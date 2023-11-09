@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 
 //importing routes from route
 const userRoutes = require('./routes/userRoutes.js');
-
+const blogRoutes = require('./routes/blogRoutes.js');
 const app = express();
 
 //database connection
@@ -17,4 +17,6 @@ app.use(cookieParser());
 
 //routes
 app.use('/api/users', userRoutes);
+app.use('/api/blogs', blogRoutes);
+
 module.exports = app;
