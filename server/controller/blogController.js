@@ -85,4 +85,41 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-module.exports = { createBlog, updateBlog, deleteBlog };
+//get all blogs
+const getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find();
+    if (blogs.length === 0) {
+      return res.status(404).json({ message: 'No blogs found' });
+    }
+    return res
+      .status(200)
+      .json({ message: 'Blog found successfully', blogs: blogs });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// find blog from a specific author
+const findByAuthor = async (req, res) => {
+  const author = req.params.id;
+  try {
+    const blogs = await Blog.find({ author: author });
+    if (blogs.length === 0) {
+      return res.status(404).json({ message: 'No blogs by this author' });
+    }
+    return res
+      .status(200)
+      .json({ message: 'These are the blogs', blogs: blogs });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  getAllBlogs,
+  findByAuthor,
+};

@@ -7,6 +7,7 @@ const {
 const validator = require('validator');
 const { request } = require('express');
 const jwt = require('jsonwebtoken');
+const Blog = require('../models/Blog.js');
 
 //endpoint for testing
 const test = (req, res) => {
@@ -121,24 +122,25 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const _id = req.params.id;
-    console.log(_id);
+    //console.log(_id);
     //decode the token from cookie
     const decodedToken = jwt.verify(req.cookies.jwt, process.env.SECRET);
-    console.log(decodedToken);
+    //console.log(decodedToken);
 
     //compare the id send with cookie and params
     if (_id !== decodedToken._id) {
       return res.status(401).json({ message: 'User not authorized' });
     }
 
+    //when removing the users remove user blogs as well
+    await Blog.deleteMany({ author: _id });
     //delete the user
-    const user = await User.findById(_id);
+    const user = await User.findByIdAndDelete(_id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    //when removing the users remove user blogs as well
     //delete the cookies
     res.clearCookie('jwt');
 
