@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SigninPage from './pages/SigninPage';
+import SignupPage from './pages/SignupPage';
+import HomePage from './pages/HomePage';
+import ErrorPage from './pages/ErrorPage';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div>
-      <p className='bg-black w-full h-screen'>Hello world this</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/signin' element={<SigninPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/' element={<HomePage />} />
+        <Route path='*' element={<ErrorPage />} />
+      </Routes>
+    </Router>
   );
 }
 
