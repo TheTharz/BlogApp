@@ -12,7 +12,7 @@ const SignupPage = () => {
   return (
     <div className='w-full h-screen flex flex-row items-center justify-center gap-8 bg-lightgray font-default'>
       {/* container of left side */}
-      <div className='m-4 p-4 bg-darkbackground rounded-lg w-[400px] text-yellow'>
+      <div className='m-4 p-4 bg-white rounded-lg w-[400px] text-yellow'>
         <div className='p-2'>
           <h3 className='text-2xl font-light'>Welcome!</h3>
           <p className='text-3xl font-medium pt-6 pb-2'>Sign in to</p>
